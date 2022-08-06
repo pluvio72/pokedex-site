@@ -3,11 +3,18 @@ import ReactDOM from 'react-dom/client';
 import "./index.scss";
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { PokemonProvider } from './contexts/pokemon';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
+// Not a great practice but since this context provider is essentially
+// serving as a caching layer so we don't have to refetch pokemon data
+// it is being rendered on top in index
 root.render(
   <React.StrictMode>
-    <App />
+    <PokemonProvider>
+      <App />
+    </PokemonProvider>
   </React.StrictMode>
 );
 
