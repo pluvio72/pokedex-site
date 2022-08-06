@@ -1,0 +1,11 @@
+.favourites-item{
+    border: 3px solid black;
+    background-color: rgb(243,244,245);
+    border-radius: .5rem;
+    padding: 10px 14px;
+    display: flex;
+    flex-direction: row;
+}
+.remove-favourite{
+    cursor: pointer;
+}

@@ -8,12 +8,13 @@ function NavbarComponent() {
       <Container>
         <Navbar.Toggle aria-controls="navbar-general" />
         <Navbar.Collapse id="navbar-general">
-          <Nav className="mx-auto align-items-center">
-            <NavLink to="/" className="nav-link fw-bold fs-4">INDEX</NavLink>
-            <Navbar.Brand className="mx-3" href="#home">
-                <img src="/images/logo.png" alt="pokemon logo" height="55"/>
-            </Navbar.Brand>
-            <NavLink to="/compare" className="nav-link fw-bold fs-4">COMPARE</NavLink>
+          <Navbar.Brand>
+              <img src="/images/logo.png" alt="pokemon logo" height="55"/>
+          </Navbar.Brand>
+          <Nav className="me-auto align-items-center">
+            <NavLink to="/" className="nav-link fw-bold fs-5">HOME</NavLink>
+            <NavLink to="/compare" className="nav-link fw-bold fs-5">COMPARE</NavLink>
+            <NavLink to="/favourites" className="nav-link fw-bold fs-5">FAV</NavLink>
           </Nav>
         </Navbar.Collapse>
       </Container>

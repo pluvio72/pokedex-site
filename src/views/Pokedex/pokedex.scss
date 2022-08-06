@@ -3,12 +3,28 @@
     background-color: rgb(240,241,242);
     border-radius: .5rem;
     display: flex;
-    flex-direction: row;
-    align-items: center;
+    flex-direction: column;
     transition: .2s;
+}
+.pokemon-card-name{
     cursor: pointer;
-
-    &:hover{
-        background-color: rgb(220,221,222);
-    }
+}
+.pokemon-card-name:hover{
+    text-decoration: underline;
+}
+.favourite-text{
+    font-size: 14px;
+    cursor: pointer;
+}
+.favourite-text.add:hover{
+    color: green!important;
+}
+.favourite-text.remove:hover{
+    color: red!important;
+}
+.favourite-icon{
+    width: 12px;
+    height: 12px;
+    margin-left: 4px;
+    margin-bottom: 1px;
 }

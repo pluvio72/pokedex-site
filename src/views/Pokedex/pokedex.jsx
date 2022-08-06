@@ -18,12 +18,15 @@ import {
 } from "../../services/pokemonAPI";
 import { formatName, formatPokemonDetails, formatPokemonInfo } from "../../util/formatData";
 import "./pokedex.scss";
+import { getFavourites, savePokemonToFavourites } from "../../services/favourites";
 
 function Pokedex() {
   const { addPokemonToList, getAllPokemon } = useContext(Pokemon);
 
   const [filter, setFilter] = useState('');
   const [pokemon, setPokemon] = useState({});
+
+  const [favourites, setFavourites] = useState(getFavourites());
 
   // cache first 20 pokemon for index page
   useEffect(() => {
@@ -115,6 +118,16 @@ function Pokedex() {
     });
   };
 
+  const addFavourite = (name, data) => {
+    savePokemonToFavourites(name, data);
+    setFavourites(prevState => {
+        return {
+            ...prevState,
+            [name]: data
+        }
+    })
+  }
+
   return (
     <Layout>
       <Container className="py-3">
@@ -146,12 +159,24 @@ function Pokedex() {
                     {Object.keys(pokemon).filter(e => e.toLowerCase().indexOf(filter) > -1).map((_name) => (
                         <Col className="col-3" key={_name}>
                             <div className="pokemon-card py-2 px-3">
-                                <span className="lead">{formatName(_name)}</span>
-                                <div className="ms-auto">
-                                {pokemon[_name].types.map((_type) => (
-                                    <Badge key={_name+_type} className={`${_type} ms-1`}>{_type}</Badge>
-                                ))}
+                                <div className="d-flex flex-row align-items-center">
+                                    <span className="lead pokemon-card-name">{formatName(_name)}</span>
+                                    <div className="ms-auto">
+                                        {pokemon[_name].types.map((_type) => (
+                                            <Badge key={_name+_type} className={`${_type} ms-1`}>{_type}</Badge>
+                                        ))}
+                                    </div>
                                 </div>
+                                {Object.keys(favourites).includes(_name) ?
+                                    <span className="fw-light favourite-text remove">
+                                        Remove Favourite
+                                        <img className="favourite-icon" src="/images/cross.png" alt="remove favourite"/>
+                                    </span>:
+                                    <span className="fw-light favourite-text add" onClick={() => addFavourite(_name, pokemon[_name])}>
+                                        Add Favourite
+                                        <img className="favourite-icon" src="/images/tick.png" alt="add favourite"/>
+                                    </span>
+                                }
                             </div>
                         </Col>
                     ))}
