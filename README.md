@@ -11,7 +11,7 @@ Pokedex site which caches pokemon stats to compare and look through your favouri
 
 ## Getting Started
 You can clone this project from your command line with `git clone https://github.com/pluvio72/pokedex-site`.
-Then to start the project in development mode on localhost:3000 run: `npm start` in the root directory.
+Then to start the project in development mode on localhost:3000 first install dependencies with: `npm install` then run: `npm start` both commands in the root directory.
 To build out react files into static JS for production run `npm run build` which builds files into the /build folder.
 
 Navigate to your server address in your preferred browser. To view in development mode.
