@@ -20,8 +20,8 @@ import "./pokedex.scss";
 function Pokedex() {
   const { addPokemonToList, getAllPokemon } = useContext(Pokemon);
 
+  const [filter, setFilter] = useState('');
   const [pokemon, setPokemon] = useState({});
-  const [loading, setLoading] = useState(true);
 
   // cache first 20 pokemon for index page
   useEffect(() => {
@@ -45,9 +45,15 @@ function Pokedex() {
     } else setPokemon(getAllPokemon());
   }, []);
 
+  const onChangeFilter = (event) => {
+      // all data in lower case for case insensitive filtering
+      setFilter(event.target.value.toLowerCase());
+  }
+
   const onSelectGeneration = (event) => {
     const newGenerationValue = event.target.value;
-
+    
+    setPokemon({});
     getPokemonByGeneration(newGenerationValue).then(async (data) => {
         const allFetchedPokemon = getAllPokemon();
         const allFetchedPokemonNames = Object.keys(allFetchedPokemon);
@@ -95,7 +101,8 @@ function Pokedex() {
                 <FormControl
                   type="text"
                   placeholder="Search by pokemon name..."
-                  />
+                  onChange={onChangeFilter}
+                />
               </div>
               <div className="flex-shrink-1">
                 <FormSelect onChange={onSelectGeneration}>
@@ -113,7 +120,7 @@ function Pokedex() {
             </div>
             {Object.keys(pokemon).length > 0 ? (
                 <Row className="gx-2 gy-2">
-                    {Object.keys(pokemon).map((_name) => (
+                    {Object.keys(pokemon).filter(e => e.toLowerCase().indexOf(filter) > -1).map((_name) => (
                         <Col className="col-3" key={_name}>
                             <div className="pokemon-card py-2 px-3">
                                 <span className="lead">{formatName(_name)}</span>
