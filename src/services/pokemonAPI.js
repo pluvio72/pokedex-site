@@ -37,21 +37,20 @@ async function getPokemonByGeneration(generation) {
     .then((data) => data.pokemon_species);
 }
 
-async function getPokemonDetailsFromList(pokemonList) {
-  let data = {};
-  for (let i = 0; i < pokemonList.length; i += 1) {
-    const allInfo = await getPokemonInfoAndDetails(
-      pokemonList[i].name,
-      pokemonList[i].url
-    );
-    data[pokemonList[i].name] = allInfo;
-  }
-  return data;
-}
+// async function getPokemonDetailsFromList(pokemonList) {
+//   let data = {};
+//   for (let i = 0; i < pokemonList.length; i += 1) {
+//     const allInfo = await getPokemonInfoAndDetails(
+//       pokemonList[i].name,
+//       pokemonList[i].url
+//     );
+//     data[pokemonList[i].name] = allInfo;
+//   }
+//   return data;
+// }
 
 export {
   getPokemonDetails,
   getPokemonByGeneration,
-  getPokemonDetailsFromList,
   getPokemonInfoAndDetails,
 };

@@ -48,34 +48,30 @@ function Pokedex() {
   const onSelectGeneration = (event) => {
     const newGenerationValue = event.target.value;
 
-    getPokemonByGeneration(newGenerationValue).then((data) => {
+    getPokemonByGeneration(newGenerationValue).then(async (data) => {
         const allFetchedPokemon = getAllPokemon();
         const allFetchedPokemonNames = Object.keys(allFetchedPokemon);
-        const newPokemonToFetch = {};
+        const newPokemonToFetch = [];
 
         for(let i = 0; i < data.length; i += 1){
             if(!(allFetchedPokemonNames.includes(data[i].name)))
-                newPokemonToFetch[data[i].name] = data[i];
+                newPokemonToFetch.push(data[i]);
         }
         console.log("New pokemon to fetch:", newPokemonToFetch);
 
         // if new pokemon to fetch get info and details
         // else retrieve from cache
-        if(Object.keys(newPokemonToFetch).length > 0){
-            const keys = Object.keys(newPokemonToFetch);
-            for(let i = 0; i < keys.length; i += 1) {
-                getPokemonInfoAndDetails(newPokemonToFetch[keys[i]])
-                    .then(_pokemonData => {
-                        const newPokemon = {...pokemon};
-                        newPokemon[_pokemonData.name] = _pokemonData;
-                        setPokemon(newPokemon);
-                        addPokemonToList(newPokemon);
-                    })
-                // getPokemonDetailsFromList(data).then(_pokemonList => {
-                //     addMultiplePokemonToList(_pokemonList);
-                //     setPokemon(_pokemonList);
-                // });
-
+        if(newPokemonToFetch.length > 0){
+            for(let i = 0; i < newPokemonToFetch.length; i += 1) {
+                const _pokemonData = await getPokemonInfoAndDetails(newPokemonToFetch[i].name, newPokemonToFetch[i].url)    
+                setPokemon(prevState => {
+                    const newState = {
+                        ...prevState,
+                        [_pokemonData.name]: _pokemonData
+                    };
+                    return newState;
+                });
+                addPokemonToList(_pokemonData.name, _pokemonData);
             }
         } else {
             const newPokemon = {};
@@ -118,15 +114,15 @@ function Pokedex() {
             {Object.keys(pokemon).length > 0 ? (
                 <Row className="gx-2 gy-2">
                     {Object.keys(pokemon).map((_name) => (
-                        <Col className="col-3">
-                        <div className="pokemon-card py-2 px-3">
-                            <span className="lead">{formatName(_name)}</span>
-                            <div className="ms-auto">
-                            {pokemon[_name].types.map((_type) => (
-                                <Badge className={`${_type} ms-1`}>{_type}</Badge>
-                            ))}
+                        <Col className="col-3" key={_name}>
+                            <div className="pokemon-card py-2 px-3">
+                                <span className="lead">{formatName(_name)}</span>
+                                <div className="ms-auto">
+                                {pokemon[_name].types.map((_type) => (
+                                    <Badge key={_name+_type} className={`${_type} ms-1`}>{_type}</Badge>
+                                ))}
+                                </div>
                             </div>
-                        </div>
                         </Col>
                     ))}
                 </Row>
