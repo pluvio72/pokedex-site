@@ -1,0 +1,28 @@
+$suggestion-box-border-radius: .5rem;
+
+.suggestions-box{
+    background-color: black;
+    display: flex;
+    flex-direction: column;
+    border-bottom-left-radius: $suggestion-box-border-radius!important;
+    border-bottom-right-radius: $suggestion-box-border-radius!important;
+    padding-bottom: .5rem;
+}
+.suggestions-box > span {
+    color: white;
+    padding: 6px 10px;
+}
+
+.select-search:focus, .select-search:active, .select-search.open{
+    border-bottom-left-radius: 0!important;
+    border-bottom-right-radius: 0!important;
+    box-shadow: none!important;
+}
+
+.suggestion{
+    transition: .2s;
+    cursor: pointer;
+}
+.suggestion:hover{
+    background-color: rgb(100,100,100);
+}

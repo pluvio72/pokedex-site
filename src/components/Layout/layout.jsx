@@ -1,14 +1,15 @@
 import React from 'react';
 import Navbar from '../Navbar';
 import PropTypes from 'prop-types';
+import "./layout.scss";
 
 function Layout({ children }){
     return (
         <div>
-            <header>
+            <header id="header">
                 <Navbar/>
             </header>
-            <main>
+            <main id="main">
                 {children}
             </main>
         </div>

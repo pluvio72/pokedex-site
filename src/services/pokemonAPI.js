@@ -14,6 +14,16 @@ async function getPokemonDetails(name) {
     });
 }
 
+async function searchPokemon(string) {
+    return fetch(POKEMON_DETAILS_ENDPOINT+string)
+        .then((results) => results.json())
+        .then((data) => data)
+        .catch((err) => {
+            console.log("Pokemon not found.");
+            return {};
+        });
+}
+
 async function getPokemonInfo(pokemonURL) {
   return fetch(pokemonURL)
     .then((results) => results.json())
@@ -53,4 +63,6 @@ export {
   getPokemonDetails,
   getPokemonByGeneration,
   getPokemonInfoAndDetails,
+  getPokemonInfo,
+  searchPokemon
 };

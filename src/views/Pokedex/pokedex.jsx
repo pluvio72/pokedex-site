@@ -12,9 +12,11 @@ import { Pokemon } from "../../contexts/pokemon";
 import Loading from "../../components/Loading";
 import {
   getPokemonByGeneration,
+  getPokemonInfo,
   getPokemonInfoAndDetails,
+  searchPokemon,
 } from "../../services/pokemonAPI";
-import { formatName } from "../../util/formatData";
+import { formatName, formatPokemonDetails, formatPokemonInfo } from "../../util/formatData";
 import "./pokedex.scss";
 
 function Pokedex() {
@@ -46,8 +48,29 @@ function Pokedex() {
   }, []);
 
   const onChangeFilter = (event) => {
+      const searchFilter = event.target.value.toLowerCase();
       // all data in lower case for case insensitive filtering
-      setFilter(event.target.value.toLowerCase());
+      setFilter(searchFilter);
+      // also search API if pokemon hasn't been cached yet
+      searchPokemon(searchFilter).then(data => {
+          const formattedDetailsData = formatPokemonDetails(data);
+          console.log("Formatted details data:", formattedDetailsData);
+          if(data.species !== undefined) {
+              getPokemonInfo(data.species.url).then((_pokemonInfo) => {
+                  const formattedInfoData = formatPokemonInfo(_pokemonInfo);
+                  console.log("formatted Info data:", formattedInfoData);
+                  const all = Object.assign(formattedDetailsData, formattedInfoData);
+                  setPokemon(prevState => {
+                      const newState = {
+                          ...prevState,
+                          [searchFilter]: all
+                      };
+                      addPokemonToList(searchFilter, all);
+                      return newState;
+                  })
+              })
+          }
+      })
   }
 
   const onSelectGeneration = (event) => {

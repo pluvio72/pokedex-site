@@ -11,7 +11,7 @@ function formatPokemonDetails(_pokemonInfo) {
             stats: Object.assign(
               {},
               ..._pokemonInfo.stats.map((e) => ({
-                [e.stat.name]: { base_state: e.base_stat, effort: e.effort },
+                [e.stat.name]: { base_stat: e.base_stat, effort: e.effort },
               }))
             ),
             types: _pokemonInfo.types.map(e => e.type.name)
