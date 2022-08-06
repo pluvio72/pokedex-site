@@ -11,15 +11,14 @@ import Layout from "../../components/Layout/layout";
 import { Pokemon } from "../../contexts/pokemon";
 import Loading from "../../components/Loading";
 import {
-  getPokemon,
   getPokemonByGeneration,
-  getPokemonDetailsFromList,
+  getPokemonInfoAndDetails,
 } from "../../services/pokemonAPI";
 import { formatName } from "../../util/formatData";
 import "./pokedex.scss";
 
 function Pokedex() {
-  const { addMultiplePokemonToList, getAllPokemon } = useContext(Pokemon);
+  const { addPokemonToList, getAllPokemon } = useContext(Pokemon);
 
   const [pokemon, setPokemon] = useState({});
   const [loading, setLoading] = useState(true);
@@ -27,12 +26,20 @@ function Pokedex() {
   // cache first 20 pokemon for index page
   useEffect(() => {
     if (Object.keys(getAllPokemon()).length === 0) {
-      getPokemonByGeneration(1).then((_pokemonList) => {
+      getPokemonByGeneration(1).then(async (_pokemonList) => {
         if (_pokemonList) {
-          getPokemonDetailsFromList(_pokemonList).then((data) => {
-            addMultiplePokemonToList(data);
-            setPokemon(data);
-          });
+            // fetch and set in list as soon as it is retrieved
+            for(let i = 0; i < _pokemonList.length; i += 1){
+                const current = await getPokemonInfoAndDetails(_pokemonList[i].name, _pokemonList[i].url);
+                setPokemon(prevState => {
+                    const newState = {
+                        ...prevState,
+                        [current.name]: current
+                    };
+                    addPokemonToList(current.name, current);
+                    return newState
+                });
+            }
         }
       });
     } else setPokemon(getAllPokemon());
@@ -44,27 +51,39 @@ function Pokedex() {
     getPokemonByGeneration(newGenerationValue).then((data) => {
         const allFetchedPokemon = getAllPokemon();
         const allFetchedPokemonNames = Object.keys(allFetchedPokemon);
-        const newPokemonToFetch = [];
+        const newPokemonToFetch = {};
 
         for(let i = 0; i < data.length; i += 1){
             if(!(allFetchedPokemonNames.includes(data[i].name)))
-                newPokemonToFetch.push(data[i]);
+                newPokemonToFetch[data[i].name] = data[i];
         }
         console.log("New pokemon to fetch:", newPokemonToFetch);
 
         // if new pokemon to fetch get info and details
         // else retrieve from cache
-        if(newPokemonToFetch.length > 0){
-            getPokemonDetailsFromList(data).then(_pokemonList => {
-                addMultiplePokemonToList(_pokemonList);
-                setPokemon(_pokemonList);
-            });
+        if(Object.keys(newPokemonToFetch).length > 0){
+            const keys = Object.keys(newPokemonToFetch);
+            for(let i = 0; i < keys.length; i += 1) {
+                getPokemonInfoAndDetails(newPokemonToFetch[keys[i]])
+                    .then(_pokemonData => {
+                        const newPokemon = {...pokemon};
+                        newPokemon[_pokemonData.name] = _pokemonData;
+                        setPokemon(newPokemon);
+                        addPokemonToList(newPokemon);
+                    })
+                // getPokemonDetailsFromList(data).then(_pokemonList => {
+                //     addMultiplePokemonToList(_pokemonList);
+                //     setPokemon(_pokemonList);
+                // });
+
+            }
         } else {
-            const newPokemon = [];
-            const selectedGenerationText = event.target[event.target.selectedIndex].text.toLowerCase();
+            const newPokemon = {};
+            const selectedGenerationText = event.target[event.target.selectedIndex].text;
+
             for(let i = 0; i < allFetchedPokemonNames.length; i += 1){
                 if(allFetchedPokemon[allFetchedPokemonNames[i]].generation === selectedGenerationText)
-                    newPokemon.push(allFetchedPokemon[allFetchedPokemonNames[i]]);
+                    newPokemon[allFetchedPokemonNames[i]] = allFetchedPokemon[allFetchedPokemonNames[i]];
             }
             setPokemon(newPokemon);
         }

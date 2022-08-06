@@ -1,0 +1,14 @@
+.pokemon-card{
+    border: 2px solid rgb(90,90,90);
+    background-color: rgb(240,241,242);
+    border-radius: .5rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    transition: .2s;
+    cursor: pointer;
+
+    &:hover{
+        background-color: rgb(220,221,222);
+    }
+}
