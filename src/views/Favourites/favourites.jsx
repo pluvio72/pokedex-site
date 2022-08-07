@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getFavourites, removePokemonFromFavourites } from "../../services/favourites";
 import Layout from "../../components/Layout";
-import { Col, Container, Row } from "react-bootstrap";
+import { Badge, Col, Container, Row } from "react-bootstrap";
 import "./favourites.scss";
 
 function Favourites() {
@@ -30,14 +30,19 @@ function Favourites() {
               <Col className="col-3">
                 <div className="favourites-item">
                   <span>{favourite}</span>
-                  <img
-                    width={16}
-                    height={16}
-                    className="align-self-center ms-auto remove-favourite"
-                    src="/images/cross.png"
-                    alt="remove favourite"
-                    onClick={() => removeFavourite(favourite)}
-                  />
+                  <div className="ms-auto">
+                    {favourites[favourite].types.map((_type) => (
+                        <Badge className={_type+" ms-1"}>{_type}</Badge>
+                    ))}
+                    <img
+                        width={16}
+                        height={16}
+                        className="align-self-center remove-favourite ms-2"
+                        src="/images/cross.png"
+                        alt="remove favourite"
+                        onClick={() => removeFavourite(favourite)}
+                    />
+                  </div>
                 </div>
               </Col>
             ))

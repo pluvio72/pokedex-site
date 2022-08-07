@@ -54,7 +54,7 @@ function Compare(){
                             <PokemonCard pokemon={pokemon1}/>
                         </div>
                     </Col>
-                    <Col className="col-2 fw-bold fs-3 text-center vs">VS</Col>
+                    <Col className="col-2 fw-bold fs-1 text-center vs">VS</Col>
                     <Col className="col-5 d-flex">
                         <div className="w-100 search-parent">
                             <SelectSearch data={pokemon} onSelect={onSelectNewPokemon2} onInputChange={onInputChange}/>

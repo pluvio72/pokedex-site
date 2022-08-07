@@ -30,7 +30,7 @@ function SelectSearch({ data, onSelect, onInputChange }){
     }
 
     return(
-        <div onMouseLeave={onInputBlur}>
+        <div>
             <FormControl
                 type="text"
                 ref={inputRef}
@@ -38,6 +38,7 @@ function SelectSearch({ data, onSelect, onInputChange }){
                 className={`select-search ${showSuggestions ? "open":""}`}
                 onFocus={onInputFocus}
                 onChange={onInputChangeLocal}
+                onBlur={onInputBlur}
                 value={filter}
             />
             {showSuggestions &&
